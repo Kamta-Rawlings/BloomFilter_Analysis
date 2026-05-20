@@ -52,6 +52,7 @@ def optimal_hash_count(m: int, n: int) -> int:
 # Default Base Hash Functions
 # =========================================================
 
+
 def default_sha256(x: str) -> int:
     """Default SHA-256 base hash function returning an integer."""
     return int(hashlib.sha256(str(x).encode("utf-8")).hexdigest(), 16)
@@ -60,3 +61,36 @@ def default_sha256(x: str) -> int:
 def default_md5(x: str) -> int:
     """Default MD5 base hash function returning an integer."""
     return int(hashlib.md5(str(x).encode("utf-8")).hexdigest(), 16)
+
+# =========================================================
+# Base Bloom Filter Class
+# =========================================================
+
+
+class BloomFilter:
+    """
+    Base Bloom Filter representation.
+    Manages bit state via the space-efficient bitarray package.
+    """
+
+    def __init__(self, m: int, *hash_functions) -> None:
+        """
+        Initializes the Bloom Filter with a specified
+        size and custom hash functions.
+
+        Args:
+            m (int): Bit array size.
+            *hash_functions: Arbitrary callable hash functions.
+        """
+        if m <= 0:
+            raise ValueError("Size m must be a positive integer.")
+        if not hash_functions:
+            raise ValueError("At least one hash function must be provided.")
+
+        self.m = m
+        self.hash_functions = hash_functions
+        self.k = len(hash_functions)
+
+        # Optimize memory usage by utilizing bitarray instead of list of ints
+        self.array = bitarray(self.m)
+        self.array.setall(0)
