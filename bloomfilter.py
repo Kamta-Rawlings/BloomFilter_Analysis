@@ -117,3 +117,17 @@ class BloomFilter:
             if self.array[index] == 0:
                 return False
         return True
+    
+    def false_positive_rate(self, inserted_elements: int) -> float:
+        """
+        Computes mathematical expected false positive rate based on current element count.
+
+        Formula:
+            P = (1 - e^(-kn/m))^k
+        """
+        if inserted_elements <= 0:
+            return 0.0
+        probability = (
+            1.0 - math.exp(-self.k * inserted_elements / self.m)
+        ) ** self.k
+        return probability
