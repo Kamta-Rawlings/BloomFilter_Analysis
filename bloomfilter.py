@@ -107,3 +107,13 @@ class BloomFilter:
                 index = hash_function(item) % self.m
                 self.array[index] = 1
 
+    def contains(self, x: str) -> bool:
+        """
+        Queries the Bloom filter.
+        Returns False if x is definitely absent, True if x is probably present.
+        """
+        for hash_function in self.hash_functions:
+            index = hash_function(x) % self.m
+            if self.array[index] == 0:
+                return False
+        return True
