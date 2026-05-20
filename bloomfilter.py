@@ -19,7 +19,7 @@ from bitarray import bitarray
 # =========================================================
 
 
-def optimal_bit_array_size(n: int, p: float) -> int:
+def optimal_m(n: int, p: float) -> int:
     """
     Computes optimal bit array size (m) for a given number of expected
     elements (n) and target false positive rate (p).
@@ -35,7 +35,7 @@ def optimal_bit_array_size(n: int, p: float) -> int:
     return math.ceil(m)
 
 
-def optimal_hash_count(m: int, n: int) -> int:
+def optimal_k(m: int, n: int) -> int:
     """
     Computes optimal number of hash functions (k) for a given bit array
     size (m) and expected number of elements (n).
@@ -94,3 +94,16 @@ class BloomFilter:
         # Optimize memory usage by utilizing bitarray instead of list of ints
         self.array = bitarray(self.m)
         self.array.setall(0)
+
+    def add(self, x) -> None:
+        """
+        Adds a single string or an iterable collection of strings to the Bloom filter.
+        """
+        # Accept both singular strings/bytes and lists/iterables of strings
+        items = [x] if isinstance(x, (str, bytes)) or not hasattr(x, '__iter__') else x
+
+        for item in items:
+            for hash_function in self.hash_functions:
+                index = hash_function(item) % self.m
+                self.array[index] = 1
+
