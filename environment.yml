@@ -1,0 +1,17 @@
+name: bloomfilter_analysis
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.12
+  - pip
+  - numpy
+  - matplotlib
+  - jupyter
+  - openssl
+
+  - pip:
+      - bitarray>=2.0.0
+      - mmh3==5.2.1

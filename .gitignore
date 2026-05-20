@@ -1,0 +1,66 @@
+# =========================
+# Python cache files
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual environments
+# =========================
+venv/
+env/
+.venv/
+
+# =========================
+# VS Code settings
+# =========================
+.vscode/
+
+# =========================
+# PyCharm settings
+# =========================
+.idea/
+
+# =========================
+# Windows files
+# =========================
+Thumbs.db
+
+# =========================
+# Benchmark outputs
+# =========================
+results/
+benchmarks/output/
+*.csv
+*.log
+
+# =========================
+# HPC / SLURM files
+# =========================
+slurm-*.out
+*.err
+
+# =========================
+# Python testing cache
+# =========================
+.pytest_cache/
+
+# =========================
+# Coverage reports
+# =========================
+.coverage
+htmlcov/
+
+# =========================
+# Distribution / packaging
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
