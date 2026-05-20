@@ -19,33 +19,54 @@ from bitarray import bitarray
 # =========================================================
 
 
-def optimal_m(n: int, p: float) -> int:
+def optimal_m(expected_items: int, false_positive_rate: float) -> int:
     """
-    Computes optimal bit array size (m) for a given number of expected
-    elements (n) and target false positive rate (p).
+    Calculate the optimal size of the bit array.
 
     Formula:
         m = -(n * ln(p)) / (ln(2)^2)
+
+    Args:
+        expected_items (int): Expected number of inserted items
+        false_positive_rate (float): Desired false positive rate
+
+    Returns:
+        int: Optimal bit array size
     """
-    if n <= 0:
-        raise ValueError("Expected elements (n) must be a positive integer.")
-    if not (0 < p < 1):
-        raise ValueError("Target falsepositiverate(p) must be btwn 0 and 1 (exclusive).")
-    m = -(n * math.log(p)) / (math.log(2) ** 2)
+
+    if expected_items <= 0:
+        raise ValueError("expected_items must be greater than 0")
+
+    if not (0 < false_positive_rate < 1):
+        raise ValueError("false_positive_rate must be between 0 and 1")
+
+    m = -(
+        expected_items * math.log(false_positive_rate)
+    ) / (math.log(2) ** 2)
+
     return math.ceil(m)
 
 
-def optimal_k(m: int, n: int) -> int:
+def optimal_k(bit_array_size: int, expected_items: int) -> int:
     """
-    Computes optimal number of hash functions (k) for a given bit array
-    size (m) and expected number of elements (n).
+    Calculate the optimal number of hash functions.
 
     Formula:
         k = (m / n) * ln(2)
+
+    Args:
+        bit_array_size (int): Size of bit array
+        expected_items (int): Expected number of inserted items
+
+    Returns:
+        int: Optimal number of hash functions
     """
-    if m <= 0 or n <= 0:
-        raise ValueError("Array size(m) and elements(n) must be positive integers.")
-    k = (m / n) * math.log(2)
+
+    if bit_array_size <= 0 or expected_items <= 0:
+        raise ValueError("Values must be greater than 0")
+
+    k = (bit_array_size / expected_items) * math.log(2)
+
     return math.ceil(k)
 
 # =========================================================
@@ -69,38 +90,34 @@ def default_md5(x: str) -> int:
 
 class BloomFilter:
     """
-    Base Bloom Filter representation.
-    Manages bit state via the space-efficient bitarray package.
+ Standard Bloom Filter implementation.
     """
 
-    def __init__(self, m: int, *hash_functions) -> None:
-        """
-        Initializes the Bloom Filter with a specified
-        size and custom hash functions.
+    def __init__(self, size: int, hash_functions):
 
-        Args:
-            m (int): Bit array size.
-            *hash_functions: Arbitrary callable hash functions.
-        """
-        if m <= 0:
-            raise ValueError("Size m must be a positive integer.")
-        if not hash_functions:
-            raise ValueError("At least one hash function must be provided.")
+        if size <= 0:
+            raise ValueError("size must be greater than 0")
 
-        self.m = m
+        if len(hash_functions) == 0:
+            raise ValueError("At least one hash function is required")
+
+        self.size = size
         self.hash_functions = hash_functions
-        self.k = len(hash_functions)
+        self.num_hashes = len(hash_functions)
 
-        # Optimize memory usage by utilizing bitarray instead of list of ints
-        self.array = bitarray(self.m)
+        # Create bit array
+        self.array = bitarray(size)
         self.array.setall(0)
+
+        # Track inserted items
+        self.count = 0
 
     def add(self, x) -> None:
         """
         Adds a single string or an iterable collection of strings to the Bloom filter.
         """
         # Accept both singular strings/bytes and lists/iterables of strings
-        items = [x] if isinstance(x, (str, bytes)) or not hasattr(x, '__iter__') else x
+        items = [x] if isinstance(x, str) else x
 
         for item in items:
             for hash_function in self.hash_functions:
@@ -117,7 +134,7 @@ class BloomFilter:
             if self.array[index] == 0:
                 return False
         return True
-    
+
     def false_positive_rate(self, inserted_elements: int) -> float:
         """
         Computes mathematical expected false positive rate based on current element count.
