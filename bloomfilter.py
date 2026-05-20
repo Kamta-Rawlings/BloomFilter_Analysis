@@ -124,37 +124,45 @@ class BloomFilter:
             self.array[index] = 1
 
         self.count += 1
-    
+
     def add_many(self, items) -> None:
         """
         Add multiple items to the Bloom filter.
         """
 
         for item in items:
-            self.add(item)    
-    
+            self.add(item)
 
-    def contains(self, x: str) -> bool:
+    def contains(self, item) -> bool:
         """
-        Queries the Bloom filter.
-        Returns False if x is definitely absent, True if x is probably present.
+        Check whether an item is in the Bloom filter.
+
+        Returns:
+            False -> definitely not present
+            True  -> probably present
         """
+
         for hash_function in self.hash_functions:
-            index = hash_function(x) % self.m
+
+            index = hash_function(item) % self.size
+
             if self.array[index] == 0:
                 return False
+
         return True
 
-    def false_positive_rate(self, inserted_elements: int) -> float:
+    def false_positive_rate(self) -> float:
         """
-        Computes mathematical expected false positive rate based on current element count.
+        Calculate the theoretical false positive rate.
+        """
 
-        Formula:
-            P = (1 - e^(-kn/m))^k
-        """
-        if inserted_elements <= 0:
+        if self.count == 0:
             return 0.0
+
         probability = (
-            1.0 - math.exp(-self.k * inserted_elements / self.m)
-        ) ** self.k
+            1 - math.exp(
+                -(self.num_hashes * self.count) / self.size
+            )
+        ) ** self.num_hashes
+
         return probability
