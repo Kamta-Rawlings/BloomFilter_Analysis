@@ -74,14 +74,26 @@ def optimal_k(bit_array_size: int, expected_items: int) -> int:
 # =========================================================
 
 
-def default_sha256(x: str) -> int:
-    """Default SHA-256 base hash function returning an integer."""
-    return int(hashlib.sha256(str(x).encode("utf-8")).hexdigest(), 16)
+def sha256_hash(item) -> int:
+    """
+    SHA-256 hash function.
+    """
+
+    return int(
+        hashlib.sha256(str(item).encode()).hexdigest(),
+        16
+    )
 
 
-def default_md5(x: str) -> int:
-    """Default MD5 base hash function returning an integer."""
-    return int(hashlib.md5(str(x).encode("utf-8")).hexdigest(), 16)
+def md5_hash(item) -> int:
+    """
+    MD5 hash function.
+    """
+
+    return int(
+        hashlib.md5(str(item).encode()).hexdigest(),
+        16
+    )
 
 # =========================================================
 # Base Bloom Filter Class
@@ -172,3 +184,37 @@ class BloomFilter:
         Return number of inserted items.
         """
         return self.count
+
+
+class KMBloomFilter(BloomFilter):
+    """
+    Bloom Filter using the Kirsch-Mitzenmacher optimization.
+
+    Uses only 2 base hash functions to generate k hashes.
+    """
+
+    def __init__(
+        self,
+        size: int,
+        num_hashes: int,
+        h1=sha256_hash,
+        h2=md5_hash
+    ):
+
+        if num_hashes <= 0:
+            raise ValueError("num_hashes must be greater than 0")
+
+        self.h1 = h1
+        self.h2 = h2
+
+        hash_functions = []
+
+        # Create k combined hash functions
+        for i in range(num_hashes):
+
+            def combined_hash(item, i=i):
+                return self.h1(item) + i * self.h2(item)
+
+            hash_functions.append(combined_hash)
+
+        super().__init__(size, hash_functions)
