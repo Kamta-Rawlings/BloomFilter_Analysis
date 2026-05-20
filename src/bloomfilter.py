@@ -11,7 +11,6 @@ Provides an object-oriented, memory-efficient Bloom Filter.
 
 import math
 import hashlib
-import copy
 from bitarray import bitarray
 
 # =========================================================
