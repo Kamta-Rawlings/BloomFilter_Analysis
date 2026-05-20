@@ -112,17 +112,27 @@ class BloomFilter:
         # Track inserted items
         self.count = 0
 
-    def add(self, x) -> None:
+    def add(self, item) -> None:
         """
-        Adds a single string or an iterable collection of strings to the Bloom filter.
+        Add one item to the Bloom filter.
         """
-        # Accept both singular strings/bytes and lists/iterables of strings
-        items = [x] if isinstance(x, str) else x
+
+        for hash_function in self.hash_functions:
+
+            index = hash_function(item) % self.size
+
+            self.array[index] = 1
+
+        self.count += 1
+    
+    def add_many(self, items) -> None:
+        """
+        Add multiple items to the Bloom filter.
+        """
 
         for item in items:
-            for hash_function in self.hash_functions:
-                index = hash_function(item) % self.m
-                self.array[index] = 1
+            self.add(item)    
+    
 
     def contains(self, x: str) -> bool:
         """
