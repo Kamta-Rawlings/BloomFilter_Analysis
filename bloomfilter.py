@@ -166,3 +166,9 @@ class BloomFilter:
         ) ** self.num_hashes
 
         return probability
+
+    def __len__(self):
+        """
+        Return number of inserted items.
+        """
+        return self.count
