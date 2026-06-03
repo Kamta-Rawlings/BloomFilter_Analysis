@@ -3,3 +3,8 @@ from bloomfilter.hashing import get_positions
 
 def test_k_positions():
     assert len(get_positions("hello", 7, 1000)) == 7
+
+
+def test_in_range():
+    for p in get_positions("hello", 10, 500):
+        assert 0 <= p < 500
