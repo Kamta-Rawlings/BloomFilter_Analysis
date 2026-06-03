@@ -50,3 +50,7 @@ class BloomFilter:
     def estimated_fpr(self):
         # current FPR estimate: (fill ratio)^k
         return self.fill_ratio() ** self.k
+
+    def __repr__(self):
+        return "BloomFilter(n=%d, p=%g, m=%d, k=%d, count=%d)" % (
+            self.capacity, self.error_rate, self.m, self.k, self.count)
