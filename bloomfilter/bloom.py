@@ -36,6 +36,13 @@ class BloomFilter:
             self.bits[p] = True
         self.count += 1
 
+    def contains(self, item):
+        # if any bit is 0 -> definitely not in set
+        for p in get_positions(item, self.k, self.m):
+            if not self.bits[p]:
+                return False
+        return True
+
     def __contains__(self, item):
         return self.contains(item)
 
