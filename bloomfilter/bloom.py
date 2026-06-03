@@ -36,3 +36,8 @@ class BloomFilter:
             self.bits[p] = True
         self.count += 1
 
+    def __contains__(self, item):
+        return self.contains(item)
+
+    def __len__(self):
+        return self.count
