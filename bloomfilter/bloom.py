@@ -41,3 +41,12 @@ class BloomFilter:
 
     def __len__(self):
         return self.count
+    # --- helpers used by the experiments ---
+
+    def fill_ratio(self):
+        # fraction of bits set to 1
+        return self.bits.count(True) / self.m
+
+    def estimated_fpr(self):
+        # current FPR estimate: (fill ratio)^k
+        return self.fill_ratio() ** self.k
