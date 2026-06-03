@@ -1,5 +1,5 @@
 # tests for the bloom filter - run with: pytest -v
-import pytest
+# import pytest
 from bloomfilter import BloomFilter
 
 
@@ -23,3 +23,16 @@ def test_no_false_negatives():
         bf.add(x)
     for x in items:
         assert x in bf
+
+def test_fpr_reasonable():
+    bf = BloomFilter(10000, 0.01)
+    for i in range(10000):
+        bf.add("in-" + str(i))
+
+    fp = 0
+    for i in range(10000):
+        if "out-" + str(i) in bf:
+            fp += 1
+    measured = fp / 10000
+    # asked for 1%, allow up to ~3%
+    assert measured < 0.03
