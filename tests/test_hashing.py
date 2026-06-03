@@ -12,3 +12,7 @@ def test_in_range():
 
 def test_deterministic():
     assert get_positions("abc", 5, 100) == get_positions("abc", 5, 100)
+
+
+def test_different_input_different_pos():
+    assert get_positions("abc", 5, 1000) != get_positions("xyz", 5, 1000)
