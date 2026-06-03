@@ -47,3 +47,14 @@ class BloomFilter:
         self._bits = bytearray((self.m + 7) // 8)
         self._count = 0
         self._hashes = HashFamily(self.k, self.m)
+
+    # ---- sizing formulas ------------------------------------------------- #
+    @staticmethod
+    def _optimal_m(n: int, p: float) -> int:
+        m = -(n * math.log(p)) / (math.log(2) ** 2)
+        return max(1, int(math.ceil(m)))
+
+    @staticmethod
+    def _optimal_k(m: int, n: int) -> int:
+        k = (m / n) * math.log(2)
+        return max(1, int(round(k)))
