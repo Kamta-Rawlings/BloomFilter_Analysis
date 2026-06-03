@@ -30,3 +30,9 @@ class BloomFilter:
         self.bits = bitarray(self.m)
         self.bits.setall(False)
         self.count = 0   # nr of items added
+
+    def add(self, item):
+        for p in get_positions(item, self.k, self.m):
+            self.bits[p] = True
+        self.count += 1
+
