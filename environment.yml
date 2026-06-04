@@ -11,6 +11,7 @@ dependencies:
   - matplotlib
   - jupyter
   - openssl
+  - pytest
 
   - pip:
       - bitarray>=2.0.0
