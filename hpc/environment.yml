@@ -12,6 +12,7 @@ dependencies:
   - matplotlib
   - jupyter
   - pytest
+   - numpy
 
   - pip:
       - bitarray>=2.0.0
