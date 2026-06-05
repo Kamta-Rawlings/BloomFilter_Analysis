@@ -1,0 +1,19 @@
+# Conda environment for running the project on the VSC HPC cluster.
+# Create with:   conda env create -f environment.yml
+# Activate with: conda activate bloomfilter_analysis
+name: bloomfilter_analysis
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - pip
+  - matplotlib
+  - jupyter
+  - pytest
+   - numpy
+
+  - pip:
+      - bitarray>=2.0.0
+      
