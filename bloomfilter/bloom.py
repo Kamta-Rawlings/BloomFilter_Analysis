@@ -1,5 +1,5 @@
 # bloom.py - Bloom filter implementation
-# Course project
+# Concepts Of DataScience project
 
 import math
 from bitarray import bitarray
