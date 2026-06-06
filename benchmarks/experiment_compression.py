@@ -31,3 +31,10 @@ for n in SIZES:
         "n=%d  set=%d B  bloom=%d B  ratio=%.1fx"
         % (n, set_bytes, bloom_bytes, set_bytes / bloom_bytes)
     )
+    
+with open("results/experiment_compression.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+    w.writeheader()
+    w.writerows(rows)
+
+print("wrote results/experiment_compression.csv")
