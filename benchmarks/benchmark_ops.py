@@ -29,3 +29,9 @@ for n in SIZES:
     })
 
     print("n=%d  add=%.3fs  lookup=%.3fs" % (n, t_add, t_look))
+    
+with open("results/benchmark_ops.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+    w.writeheader()
+    w.writerows(rows)
+print("wrote results/benchmark_ops.csv")
