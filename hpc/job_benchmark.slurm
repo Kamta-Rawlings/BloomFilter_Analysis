@@ -12,7 +12,7 @@
 
 # Load conda + activate the env
 module load Miniconda3
-source activate bloom
+source activate bloomfilter_analysis
 
 # Run the three experiments and then make the plots
 python benchmarks/benchmark_ops.py
