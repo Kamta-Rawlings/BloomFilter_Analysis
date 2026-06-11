@@ -28,4 +28,17 @@ for step in range(1, STEPS + 1):
             fp += 1
     measured = fp / Q
 
+    rows.append({
+        "items_inserted": end,
+        "load_factor": end / CAP,
+        "fill_ratio": bf.fill_ratio(),
+        "theoretical_fpr": bf.estimated_fpr(),
+        "measured_fpr": measured,
+    })
+    print("n=%d  measured=%.4f  theory=%.4f" % (end, measured, bf.estimated_fpr()))
 
+with open("results/experiment_fpr.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+    w.writeheader()
+    w.writerows(rows)
+print("wrote results/experiment_fpr.csv")
