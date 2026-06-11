@@ -32,7 +32,7 @@ BloomFilter_Analysis/
 │   └── words.txt
 │
 ├── hpc/
-│   ├── environment.yml
+│   ├── hpc_readme.md
 │   ├── job_benchmark.slurm
 │   ├── job_fpr.slurm
 │   ├── job_hashes.slurm
