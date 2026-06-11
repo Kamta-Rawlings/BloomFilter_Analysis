@@ -14,10 +14,26 @@ def _to_bytes(item):
     return str(item).encode("utf-8")
 
 
-def get_positions(item, k, m):
-    """Return k bit positions in [0, m) for the given item."""
-    h1, h2 = _two_hashes(item)
-    out = []
-    for i in range(k):
-        out.append((h1 + i * h2) % m)
-    return out
+# --- individual hash functions (return non-negative int) ---
+
+def djb2(item):
+    h = 5381
+    for b in _to_bytes(item):
+        h = ((h * 33) + b) & 0xFFFFFFFFFFFFFFFF
+    return h
+
+
+def sdbm(item):
+    h = 0
+    for b in _to_bytes(item):
+        h = (b + (h << 6) + (h << 16) - h) & 0xFFFFFFFFFFFFFFFF
+    return h
+
+
+def fnv1a(item):
+    # 64-bit FNV-1a
+    h = 0xcbf29ce484222325
+    for b in _to_bytes(item):
+        h ^= b
+        h = (h * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF
+    return h
