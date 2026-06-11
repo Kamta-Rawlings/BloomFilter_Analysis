@@ -6,6 +6,7 @@
 
 import hashlib
 
+
 def _to_bytes(item):
     if isinstance(item, str):
         return item.encode("utf-8")
