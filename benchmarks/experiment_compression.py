@@ -1,3 +1,5 @@
+# experiment_compression.py
+# Compare memory: python set vs bloom filter.
 import csv, os, sys
 from bloomfilter import BloomFilter
 
