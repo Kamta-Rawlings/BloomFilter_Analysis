@@ -37,3 +37,13 @@ def fnv1a(item):
         h ^= b
         h = (h * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF
     return h
+
+
+def blake2_h1(item):
+    d = hashlib.blake2b(_to_bytes(item), digest_size=8, person=b"bloom_h1").digest()
+    return int.from_bytes(d, "big")
+
+
+def blake2_h2(item):
+    d = hashlib.blake2b(_to_bytes(item), digest_size=8, person=b"bloom_h2").digest()
+    return int.from_bytes(d, "big")
