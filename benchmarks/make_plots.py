@@ -29,3 +29,21 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 plt.savefig("results/ops_time.png", dpi=120, bbox_inches="tight")
 plt.close()
+
+# fpr
+fpr = load("results/experiment_fpr.csv")
+
+load_f = [float(r["load_factor"]) for r in fpr]
+meas = [float(r["measured_fpr"]) for r in fpr]
+theo = [float(r["theoretical_fpr"]) for r in fpr]
+
+plt.figure()
+plt.plot(load_f, meas, "o-", label="measured")
+plt.plot(load_f, theo, "--", label="theory")
+plt.xlabel("load factor")
+plt.ylabel("false positive rate")
+plt.title("FPR vs load")
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.savefig("results/fpr_vs_load.png", dpi=120, bbox_inches="tight")
+plt.close()
