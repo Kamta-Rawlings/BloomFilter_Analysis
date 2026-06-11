@@ -1,6 +1,10 @@
 # benchmark_ops.py
 # Times add() and contains() for different n. Writes a CSV.
-import csv, time, os
+import csv
+import os
+# import sys
+import time
+
 from bloomfilter import BloomFilter
 
 SIZES = [1000, 10000, 100000, 500000]
