@@ -1,4 +1,8 @@
-import csv, os, sys
+# experiment_compression.py
+# Compare memory: python set vs bloom filter.
+import csv
+import os
+import sys
 from bloomfilter import BloomFilter
 
 SIZES = [1000, 10000, 100000, 500000]
@@ -31,7 +35,7 @@ for n in SIZES:
         "n=%d  set=%d B  bloom=%d B  ratio=%.1fx"
         % (n, set_bytes, bloom_bytes, set_bytes / bloom_bytes)
     )
-    
+
 with open("results/experiment_compression.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
     w.writeheader()

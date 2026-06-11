@@ -1,4 +1,10 @@
-import csv, time, os
+# benchmark_ops.py
+# Times add() and contains() for different n. Writes a CSV.
+import csv
+import os
+# import sys
+import time
+
 from bloomfilter import BloomFilter
 
 SIZES = [1000, 10000, 100000, 500000]
@@ -29,7 +35,7 @@ for n in SIZES:
     })
 
     print("n=%d  add=%.3fs  lookup=%.3fs" % (n, t_add, t_look))
-    
+
 with open("results/benchmark_ops.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
     w.writeheader()
