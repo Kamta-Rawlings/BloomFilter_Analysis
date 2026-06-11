@@ -9,7 +9,6 @@ dependencies:
   - pip
   - numpy
   - matplotlib
-  - jupyter
   - openssl
   - pytest
 
