@@ -1,5 +1,8 @@
 # experiment_hash_quality.py
 # Compare how evenly different hash functions distribute values.
+# Tested on:
+#   1. Random strings
+#   2. Real English words
 
 import csv
 import os
@@ -17,35 +20,69 @@ random.seed(2)
 N = 20000  # number of test items
 M = 200    # number of buckets
 
-# Generate random strings
-items = [
+# ------------------------------------------------------------------
+# DATASET 1: RANDOM STRINGS
+# ------------------------------------------------------------------
+
+random_strings = [
     "".join(random.choices(string.ascii_lowercase, k=8))
     for _ in range(N)
 ]
 
-# Test each hash function
-for name, fn in HASHES.items():
+# ------------------------------------------------------------------
+# DATASET 2: REAL ENGLISH WORDS
+# ------------------------------------------------------------------
 
-    counts = [0] * M
+with open("datasets/words.txt") as f:
+    words = [line.strip() for line in f if line.strip()]
 
-    # Count how many values fall into each bucket
-    for item in items:
-        bucket = fn(item) % M
-        counts[bucket] += 1
+# Use at most N words
+words = words[:N]
 
-    # Save histogram data
-    output_file = f"results/hist_{name}.csv"
+# ------------------------------------------------------------------
+# ALL DATASETS
+# ------------------------------------------------------------------
 
-    with open(output_file, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["bucket", "count"])
+datasets = {
+    "random": random_strings,
+    "words": words,
+}
 
-        for bucket, count in enumerate(counts):
-            writer.writerow([bucket, count])
+# ------------------------------------------------------------------
+# TEST HASH FUNCTIONS
+# ------------------------------------------------------------------
 
-    print(
-        f"{name}: "
-        f"min={min(counts)} "
-        f"max={max(counts)} "
-        f"mean={N/M:.1f}"
-    )
+for dataset_name, items in datasets.items():
+
+    print("\n" + "=" * 60)
+    print(f"Dataset: {dataset_name}")
+    print("=" * 60)
+
+    for name, fn in HASHES.items():
+
+        counts = [0] * M
+
+        # Count how many values fall into each bucket
+        for item in items:
+            bucket = fn(item) % M
+            counts[bucket] += 1
+
+        # Save histogram data
+        output_file = f"results/hist_{name}_{dataset_name}.csv"
+
+        with open(output_file, "w", newline="") as f:
+            writer = csv.writer(f)
+
+            writer.writerow(["bucket", "count"])
+
+            for bucket, count in enumerate(counts):
+                writer.writerow([bucket, count])
+
+        print(
+            f"{name:<12} "
+            f"min={min(counts):3d} "
+            f"max={max(counts):3d} "
+            f"mean={len(items)/M:.1f}"
+        )
+
+print("\nHash quality experiment completed.")
