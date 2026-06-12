@@ -56,23 +56,41 @@ plt.savefig("results/fpr_vs_load.png", dpi=120, bbox_inches="tight")
 plt.close()
 
 # compression
+
 comp = load("results/experiment_compression.csv")
 
-ns2 = [int(r["n"]) for r in comp]
-sb = [int(r["set_bytes"]) for r in comp]
-bb = [int(r["bloom_bytes"]) for r in comp]
-
 plt.figure()
-plt.plot(ns2, sb, "o-", label="set")
-plt.plot(ns2, bb, "s-", label="bloom (1% fpr)")
+
+for p in sorted(set(float(r["target_fpr"]) for r in comp)):
+
+    rows = [r for r in comp if float(r["target_fpr"]) == p]
+
+    ns = [int(r["n"]) for r in rows]
+    ratios = [float(r["compression_ratio"]) for r in rows]
+
+    plt.plot(
+        ns,
+        ratios,
+        "o-",
+        label=f"FPR={p}"
+    )
+
 plt.xscale("log")
-plt.yscale("log")
-plt.xlabel("n items")
-plt.ylabel("bytes")
-plt.title("memory: set vs bloom")
+
+plt.xlabel("expected number of items (n)")
+plt.ylabel("compression ratio")
+
+plt.title("Compression vs Expected Size and Target FPR")
+
 plt.legend()
 plt.grid(True, alpha=0.3)
-plt.savefig("results/compression.png", dpi=120, bbox_inches="tight")
+
+plt.savefig(
+    "results/compression.png",
+    dpi=120,
+    bbox_inches="tight"
+)
+
 plt.close()
 
 # optimal k
