@@ -103,6 +103,67 @@ The project uses Kirsch-Mitzenmacher double hashing to generate multiple Bloom f
 
 ---
 
+# Complexity Analysis
+
+Let:
+
+* **m** be the number of bits in the Bloom filter.
+* **k** be the number of hash functions.
+* **n** be the number of inserted elements.
+
+### Insertion
+
+To insert an item, the Bloom filter computes **k** hash positions and sets **k** bits in the bit array.
+
+Time complexity:
+
+```text
+O(k)
+```
+
+Since k is typically small and fixed, insertion is effectively constant time.
+
+### Membership Query
+
+To test whether an item is present, the Bloom filter computes the same **k** hash positions and checks the corresponding bits.
+
+Time complexity:
+
+```text
+O(k)
+```
+
+As with insertion, k is usually small and fixed.
+
+### Space Complexity
+
+The Bloom filter stores a bit array of size **m** bits.
+
+Space complexity:
+
+```text
+O(m)
+```
+
+The memory usage depends only on the filter size and not on the number of inserted elements after construction.
+
+### Hashing Complexity
+
+For an input string of length **L**, hashing requires processing each character.
+
+Hashing complexity:
+
+```text
+O(L)
+```
+
+For bounded-length strings, the overall insertion and lookup operations remain approximately O(k).
+
+### Experimental Verification
+
+The benchmark experiments (`benchmark_ops.py`) show that insertion and lookup times remain nearly constant as the number of stored elements increases, confirming the expected theoretical complexity.
+
+
 # Test Suite
 
 The test suite verifies:
@@ -222,6 +283,23 @@ Produces:
 
 * benchmark_ops.csv
 * ops_time.png
+
+---
+
+## Hash Function Validation
+
+The hash functions were evaluated using two different data types:
+
+- Natural language words (`datasets/words.txt`)
+- Randomly generated strings 
+
+For both datasets, histogram and correlation experiments were performed to evaluate:
+
+- Distribution uniformity
+- Bucket occupancy
+- Correlation between hash functions
+
+The results indicate that the implemented hash functions distribute values approximately uniformly and exhibit low correlation on both datasets, making them suitable for Bloom filter applications.
 
 ---
 
