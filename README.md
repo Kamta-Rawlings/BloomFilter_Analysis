@@ -366,16 +366,21 @@ squeue -u $USER
 
 The experiments confirm several theoretical Bloom filter properties:
 
-1. The measured false positive rate closely matches the theoretical false positive rate.
+* The measured false positive rate closely matches the theoretical false positive rate predicted by Bloom filter theory.
 
-2. Increasing filter size significantly reduces false positives.
+* Increasing the filter size significantly reduces the false positive rate, while overloading the filter beyond its design capacity increases the probability of false positives.
 
-3. An optimal number of hash functions exists that minimizes false positive rate.
+* An optimal number of hash functions exists that minimizes the false positive rate for a given filter size.
 
-4. Bloom filters provide substantial memory savings compared to storing all items in a Python set.
+* Bloom filters provide substantial memory savings compared to storing all elements explicitly in a Python set, while maintaining fast membership queries.
 
-5. Lookup operations for present and absent elements have nearly identical execution times.
+* Insert and lookup operations remain approximately constant-time with respect to the number of stored elements, confirming the expected O(k) complexity.
 
-6. The implemented hash functions exhibit good distribution and low correlation.
+* Lookup operations for present and absent elements have very similar execution times.
 
-These results demonstrate that Bloom filters are highly efficient for large-scale membership testing where small false positive rates are acceptable.
+* The implemented hash functions (Blake2b, DJB2, SDBM, and FNV-1a) exhibit good distribution and low correlation.
+
+* Hash quality was evaluated using both natural-language words and randomly generated strings, demonstrating that the hash functions perform well across different data types.
+
+These results demonstrate that Bloom filters are highly efficient for large-scale membership testing where small false positive rates are acceptable and memory efficiency is important.
+
